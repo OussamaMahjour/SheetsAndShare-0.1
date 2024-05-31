@@ -23,6 +23,7 @@ public class App
         App.run();
     }
     public static void run(){
+        enableDebugScreen();
         Injector injector = Guice.createInjector(new AppConfig());
         Spark.port(8080);
         Spark.staticFiles.location("/public");
@@ -30,24 +31,8 @@ public class App
         
         
         Spark.before((req,res)->{
-            if(req.session().attribute("user")==null 
-            && !req.pathInfo().equals("/")
-            && !(req.pathInfo().equals("/auth") && req.session().attribute("loggin")!=null)  
-            && !req.pathInfo().equals("/login")       
-            ){
-
-               res.redirect("/");
-            }
-            if(req.session().attribute("init")!=null){
-            SpreadsheetController spreadsheetController= injector.getInstance(SpreadsheetController.class);
-            EmailController emailController = injector.getInstance(EmailController.class);
-            TableController tableController = injector.getInstance(TableController.class);
-            spreadsheetController.initRoutes();
-            emailController.initRoutes();
-            tableController.initRoutes();
-       
-                
-            }
+           
+           
             
         });
                 
@@ -57,7 +42,7 @@ public class App
        
 
 
-        enableDebugScreen();
+        
         
     }
 }

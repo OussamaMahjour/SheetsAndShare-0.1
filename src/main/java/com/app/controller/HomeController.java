@@ -41,12 +41,21 @@ public class HomeController extends Controller{
 
             
     public Response auth(Request request,Response response) throws IOException
-    {      
-        Injector injector = Guice.createInjector(new AppConfig());
-        UserService userService = injector.getInstance(UserService.class);
-        User user = userService.creatUser(request);
-        request.session().attribute("user",user);
-        request.session().attribute("init",true);
+    {     
+        if(request.session().attribute("null")==null){
+            Injector injector = Guice.createInjector(new AppConfig());
+            UserService userService = injector.getInstance(UserService.class);
+            User user = userService.creatUser(request);
+            request.session().attribute("user",user);
+            SpreadsheetController spreadsheetController= injector.getInstance(SpreadsheetController.class);
+            EmailController emailController = injector.getInstance(EmailController.class);
+            TableController tableController = injector.getInstance(TableController.class);
+            spreadsheetController.initRoutes();
+            emailController.initRoutes();
+            tableController.initRoutes();
+            request.session().removeAttribute("loggin");
+        }
+        
         response.redirect("/");  
         return response;
     }
