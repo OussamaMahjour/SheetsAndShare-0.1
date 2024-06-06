@@ -1,16 +1,16 @@
 package com.app.model;
 
+import java.util.List;
 import java.util.Map;
-
 public class Spreadsheet {
     private String id;
     private String name;
-    private Map<String,Object> data;
+    private Map<String,List<List<Object>>> data;
 
     public String getId(){
         return this.id;
     }
-    public Map<String,Object> getData(){
+    public Map<String,List<List<Object>>> getData(){
         return this.data;
     }
 
@@ -26,9 +26,10 @@ public class Spreadsheet {
         this.id = id;
         return this;
     }
-    public Spreadsheet setData(Map<String,Object> data){
+    public Spreadsheet setData(Map<String,List<List<Object>>> data){
         this.data = data;
         return this;
     }
+   
     
 }

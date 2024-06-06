@@ -7,10 +7,10 @@ import java.util.Map;
 public class Table {
     private String name;
     private String id;
-    private String range;
+    private String sheet;
     private Map<String,List<Object>> data;
 
-
+    public Table(){}
     public Table(String id,String name,Map<String,List<Object>> data){
         this.id = id;
         this.name = name;
@@ -29,9 +29,13 @@ public class Table {
         return this.data;
     }
 
-    public String getRange(){
-        return this.range;
+    public String getSheet(){
+        return this.sheet;
     }
+    public Table setSheet(String sheet){
+        this.sheet = sheet;
+        return this;
+    };
 
     public Table setName(String name){
         this.name = name;
@@ -47,9 +51,6 @@ public class Table {
         return this;
     }
 
-    public Table setRange(String range){
-        this.range =range;
-        return this;
-    }
+  
 
 }

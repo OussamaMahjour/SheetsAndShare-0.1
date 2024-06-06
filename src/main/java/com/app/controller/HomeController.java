@@ -42,7 +42,7 @@ public class HomeController extends Controller{
             
     public Response auth(Request request,Response response) throws IOException
     {     
-        if(request.session().attribute("null")==null){
+        if(request.session().attribute("user")==null){
             Injector injector = Guice.createInjector(new AppConfig());
             UserService userService = injector.getInstance(UserService.class);
             User user = userService.creatUser(request);

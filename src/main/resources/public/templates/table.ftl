@@ -5,8 +5,9 @@
 <div class="add-table-container add-table-container-close">
         <div class="container add-table-modal py-3">
             <div class="row spreadsheet-select align-items-center align-content-between justify-content-around overlow-hidden gap-3">
-                select a Spreadsheet
+                
                 <select  name="spreadsheet" class="col-3 spreadsheet-selecting">
+                        <option value="" disabled selected>select a Spreadsheet</option>
                 <#if user.repository.spreadsheets??>
                     <#list user.repository.spreadsheets as spreadsheet>
                         <option value="${spreadsheet.id}">${spreadsheet.name}</option>
@@ -29,12 +30,13 @@
                 <input name="table_name" class="table-name">
                 </div>
                 <div class="col-5">
-                select a sheet <br>
+                 
                   <#if user.repository.spreadsheets??>
                 <#list user.repository.spreadsheets as spreadsheet>
                     <select class="select-${spreadsheet.id} select-sheet <#if spreadsheet?index != 0>d-none</#if>" >
+                    <option value="" disabled selected>select a sheet</option>
                     <#list spreadsheet.data?keys as sheet>
-                    <option>${sheet}</option>
+                    <option value="${sheet}-${spreadsheet.id}">${sheet}</option>
                     
                     </#list>
                     </select>
@@ -55,7 +57,7 @@
             <#assign alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ">
                 <#list user.repository.spreadsheets as spreadsheet>
                     <#list spreadsheet.data as sheet,data >
-                <table class="table table-borderless range-${sheet}-${spreadsheet.id} d-none text-center" style="width:10rem;">
+                <table class="table table-borderless table-range d-none range-${sheet}-${spreadsheet.id} text-center" style="width:10rem;">
                     <thead>
                         <th scope="col"></th>
                         <th scope="col">Ligne</th>
@@ -65,9 +67,10 @@
                         <tr>
                             <th scope="row">Start</th>
                             <td>
-                                <select >
-                                    <#list data as row>
-                                    <option >${alphabet[row?index]}</option>
+                                <select class="${sheet}-${spreadsheet.id} row-range start-row-range ">
+                                    <#list data as row >
+                                        
+                                    <option value="${row?index}" >${row?index}</option>
                                    </#list>
                                 </select>
                                     
@@ -76,11 +79,11 @@
                             </td>
                             <td>
                                 
-                                <select  class="${sheet}-${spreadsheet.id} d-none">
-                                    <#list data[0] as column >
-                                        
-                                    <option >${column?index}</option>
+                                <select   class="${sheet}-${spreadsheet.id} column-range start-column-range ">
+                                <#list data[0] as column >
+                                    <option value="${column?index}" >${alphabet[column?index]}</option>
                                    </#list>
+                                    
                                 </select>
                                     
                             </td>
@@ -88,18 +91,19 @@
                         <tr>
                             <th scope="row">End</th>
                             <td>
-                                <select >
-                                    <#list data as row>
-                                    <option >${alphabet[row?index]}</option>
+                                <select class="${sheet}-${spreadsheet.id} row-range end-row-range">
+                                <#list data as row >
+                                        
+                                    <option value="${row?index}">${row?index}</option>
                                    </#list>
                                 </select>
                             </td>
                             <td>
-                                 <select  class="${sheet}-${spreadsheet.id} d-none">
-                                    <#list data[0] as column >
-                                        
-                                    <option >${column?index}</option>
+                                 <select  class="${sheet}-${spreadsheet.id} column-range end-column-range"> 
+                                 <#list data[0] as column>
+                                    <option value="${column?index}" <#if (column?index +1)== data[0]?size> selected </#if>>${alphabet[column?index]}</option>
                                    </#list>
+
                                 </select>
                             </td>
                             
@@ -111,6 +115,8 @@
             </#list>  
                 </div>
                 <div class="col-5 columns-name-container">
+                         
+
                 </div>
              </div>   
                 
@@ -123,21 +129,37 @@
 </div>
     
 <div class="tables-container container  overflow-scroll">
-    <#if tables??>
-    <#list tables as table>
+    <#if user.repository.tables??>
+    <#list user.repository.tables as table>
         <table class="table table-bordered" >
             <thead>
-                <th scope="column " colspan="${table.data[0]?size}" >${table.name}<th>
+                <th scope="column " ><i class="fa-solid fa-caret-right px-2 drop-down  drop-down-close" id="table-${table.name}-${table.id}" ></i>${table.name}</th>
             </thead>
             <tbody>
-                <#list table.data as row>
-                    <tr>
-                        <#list row as column>
-                            <td>${column}</td>
-                        
-                        </#list>
-                    <tr>
-                </#list>
+                <tr class="p-0 table-${table.name}-${table.id} close">
+                    <td class="p-0">
+                    <table class="table table-bordered m-0">
+                        <thead>
+                            <#list table.data?keys as name >
+                            <th scope="column" >${name}</th>
+                            </#list>
+                        </thead>
+                        <tbody>
+                           
+                                    <#list 1..(table.data?values[0])?size as column >
+                                        <tr>
+                                            <#list table.data?values as data>
+                                                    <td> ${data[column-1]}</td>
+                                            </#list>
+                                        </tr>
+                                    </#list>
+                           
+                        </tbody>
+
+                    </table>
+                    </td>
+                </tr>
+                
             </tbody>
         </table>
     

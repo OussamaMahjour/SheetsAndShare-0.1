@@ -3,6 +3,7 @@ package com.app.service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.app.model.User;
@@ -23,7 +24,7 @@ public class SpreadsheetService {
 
     public void addSpreadsheet(String id,User user) throws IOException{
         Spreadsheet spreadsheet = this.service.spreadsheets().get(id).execute();
-        Map<String,Object> dataRange = new HashMap<>();
+        Map<String,List<List<Object>>> dataRange = new HashMap<>();
         for(Sheet sheet :spreadsheet.getSheets()){
             String sheetName = sheet.getProperties().getTitle();
             ValueRange response = service.spreadsheets().values().get(id,sheetName ).execute();

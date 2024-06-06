@@ -71,3 +71,12 @@
 .tables-container table{
     width: 100%;
 }
+.drop-down{
+    transition: 0.3s ease !important;
+    cursor: pointer;
+}
+.close{
+    display: inline-block;
+    overflow: hidden;
+    height: 0 !important;
+}
