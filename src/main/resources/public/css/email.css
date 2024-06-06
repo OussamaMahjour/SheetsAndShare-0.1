@@ -1,0 +1,8 @@
+.compile{
+    width: 10%;
+    background-color: var(--text-dark);
+    color: var(--text-light);
+    height: 3rem;
+    border-radius: 10px;
+    border: 1px solid var(--text-dark);
+}
