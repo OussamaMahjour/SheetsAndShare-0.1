@@ -27,7 +27,7 @@ public class TableService {
                      column.add(data.get(j).get(i));
 
                 }
-                table_data.put(col_names.get(end_col-i),column);
+                table_data.put(col_names.get(i-start_col),column);
 
 
             }
