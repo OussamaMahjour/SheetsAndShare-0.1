@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded",function(){
         })
 
     });
+
+
     drop_down.forEach(function(element){
         element.addEventListener("click",function(e){
             if(element.classList.contains("drop-down-close")){
@@ -33,6 +35,23 @@ document.addEventListener("DOMContentLoaded",function(){
           
     })
     })
+
+    let delete_spreadsheet = document.querySelectorAll(".delet-sheet");
+    delete_spreadsheet.forEach(function(element){
+        element.addEventListener("click",function(e){
+            var spreadsheetId = element.id.split("-")[1];
+            console.log("/spreadsheet/deleteSpreadsheet?id="+spreadsheetId);
+            fetch("/spreadsheet/deleteSpreadsheet?id="+spreadsheetId).then(
+                response =>{
+                    if(response.status==200){
+                        window.location.reload();
+                    }
+                }
+            );
+
+        });
+        
+    });
     
     
 })

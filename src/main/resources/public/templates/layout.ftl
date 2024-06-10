@@ -9,14 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="d-flex justify-content-center">
-<div class="modal-container d-none">
-<div class="loader-container d-none"><div id="loader">
-  <div id="shadow"></div>
-  <div id="box"></div>
-</div>
-<h4>Loader #6</h4></div>
+  <div class="modal-container d-none">
+    <div class="loader-container d-none">
+      <div id="loader">
+        <div id="shadow"></div>
+        <div id="box"></div>
+      </div>
+    </div>
 
-</div>
+  </div>
 <div class="row global-container ">
     <div class="col-2 side-bar overflow-hidden px-4">
         <div class="profile ">
@@ -37,7 +38,7 @@
                   </a>
               </li>
               <li class="nav-item mb-2 px-2">
-                  <a href="table" class="nav-link py-1 nav-tables">
+                  <a href="table" class="nav-link py-1 nav-table">
                        <i class=" fa-solid fa-database  bi me-2" width="16" height="16"></i>
                       Tables
                   </a>
@@ -58,7 +59,7 @@
             </ul>
         </div>
         <div class="exit  d-flex justify-content-center " >
-          <a href="/logout" class="text-white text-decoration-none  "> 
+          <a href="/logOut" class="text-white text-decoration-none  "> 
             <i class="fa-solid  fa-arrow-right-from-bracket mx-2"></i>
             Log Out
           </a>

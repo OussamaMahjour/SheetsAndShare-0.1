@@ -1,6 +1,7 @@
 package com.app.controller;
 
 
+import java.io.File;
 import java.io.IOException;
 
 import com.app.config.AppConfig;
@@ -8,7 +9,6 @@ import com.app.model.User;
 import com.app.service.UserService;
 import com.app.util.GoogleUtilApi;
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import spark.Request;
@@ -16,23 +16,16 @@ import spark.Response;
 import spark.Spark;
 
 public class HomeController extends Controller{
-    
-    @Inject 
-    public HomeController(){
-        
-        
-    }
-
-
     @Override
     public  void initRoutes() {
         Spark.get("/",this::index);
-        Spark.get("/auth",this::auth);
         Spark.get("/login",this::login);
+        Spark.get("/logOut",this::logOut);
+
     }
 
-
-    public String index(Request request,Response response) throws IOException {
+    @Override
+    public String index(Request request,Response response){
         if(request.session().attribute("user")!=null){
             return render(request,"home.ftl");
         }
@@ -40,7 +33,7 @@ public class HomeController extends Controller{
     }
 
             
-    public Response auth(Request request,Response response) throws IOException
+    private Response auth(Request request,Response response) throws IOException
     {     
         if(request.session().attribute("user")==null){
             Injector injector = Guice.createInjector(new AppConfig());
@@ -53,22 +46,29 @@ public class HomeController extends Controller{
             spreadsheetController.initRoutes();
             emailController.initRoutes();
             tableController.initRoutes();
-            request.session().removeAttribute("loggin");
-        }
-        
+        } 
         response.redirect("/");  
         return response;
     }
 
 
-    public String login(Request request ,Response response) throws IOException{
+    private Response login(Request request ,Response response) throws IOException{
         Injector injector = Guice.createInjector(new AppConfig());
         GoogleUtilApi googleUtilApi = injector.getInstance(GoogleUtilApi.class);
-        request.attribute("loggin",true);
         googleUtilApi.getCredentials(response);
+        Spark.get("/auth",this::auth);
         response.redirect("/auth");
-        return null;
-        
+        return response;      
+    }
+
+    private Response logOut(Request request ,Response response) throws IOException{
+        request.session().removeAttribute("user");
+        File f = new File("tokens/StoredCredential");
+        if(f.exists()){
+            f.delete();
+        }
+        response.redirect("/");
+        return response;
     }
     
 }

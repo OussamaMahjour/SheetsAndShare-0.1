@@ -8,10 +8,10 @@ public class Table {
     private String name;
     private String id;
     private String sheet;
-    private Map<String,List<Object>> data;
+    private List<Column> data;
 
     public Table(){}
-    public Table(String id,String name,Map<String,List<Object>> data){
+    public Table(String id,String name, List<Column> data){
         this.id = id;
         this.name = name;
         this.data = data;
@@ -25,7 +25,7 @@ public class Table {
         return this.id;
     }
 
-    public Map<String,List<Object>> getData(){
+    public List<Column> getData(){
         return this.data;
     }
 
@@ -46,9 +46,18 @@ public class Table {
         this.id = id;
         return this;
     }
-    public Table setData(Map<String,List<Object>> data){
+    public Table setData(List<Column> data){
         this.data = data;
         return this;
+    }
+    public Column getColumn(String name){
+        for(Column column : this.data ){
+            if(column.getName().equals(name)){
+                return column;
+            }
+        }
+        return null;
+
     }
 
   

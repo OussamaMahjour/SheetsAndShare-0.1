@@ -28,9 +28,9 @@
                          <#list user.repository.tables as table>
                           <select class="ps-2 mx-4 d-flex d-none table-${table.name} column" style="width:20%; height:2rem;" >
                                     <option selected disabled >column</option>
-                                <#list table.data?keys as name>
-                                    <option value="${name}">
-                                        ${name}
+                                <#list table.data as column>
+                                    <option value="${column.name}">
+                                        ${column.name}
                                     </option>
 
                                 </#list>
@@ -79,8 +79,8 @@
                                 <div class="dropdown-submenu">
                                     <a class="dropdown-item dropdown-toggle " href="#">${table.name}</a>
                                     <div class="dropdown-menu  border-dark">
-                                        <#list table.data?keys as name>
-                                        <a class="dropdown-item " href="#" onclick="document.querySelector('.message').value+='{{${table.name}->${name}}}'">${name}</a>
+                                        <#list table.data as column>
+                                        <a class="dropdown-item " href="#" onclick="document.querySelector('.message').value+='{{${table.name}->${column.name}}}'">${column.name}</a>
                                         </#list>
                                     </div>
                                 </div>

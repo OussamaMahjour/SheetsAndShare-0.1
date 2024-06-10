@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.app.App;
-
+import spark.Response;
 
 import freemarker.template.Configuration;
 import spark.ModelAndView;
@@ -32,9 +32,8 @@ public abstract class Controller {
         return FreeMarkerEngine().render(new ModelAndView(param, file));
     }
 
+    public abstract void initRoutes();
 
-    public void initRoutes() {
-
-    }
+    public abstract String index(Request request,Response response);
 
 }

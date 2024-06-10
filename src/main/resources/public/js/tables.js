@@ -1,88 +1,103 @@
 document.addEventListener("DOMContentLoaded",function(){
     let add_table_button = document.querySelector(".add-table");
     let add_table_container =document.querySelector(".add-table-container");
-    let spreadsheet_select = document.querySelector(".spreadsheet-selecting");
-    let creat_table = document.querySelector(".creat-table");
-    let sheet = document.querySelectorAll(".select-sheet");
-    
+    let add_column = document.querySelector(".add-column");
+    let select_spreadsheet = document.querySelector(".select-spreadsheet");
+
     add_table_button.addEventListener("click",function(e){
         add_table_container.classList.remove("add-table-container-close");
     });
+
     add_table_container.addEventListener('click',function(e){
         if (add_table_container == (e.target)) {
-            add_table_container.classList.add("add-table-container-close")
-           
+            add_table_container.classList.add("add-table-container-close")       
+        }
+    })
+    select_spreadsheet.addEventListener("change",function(e){
+        var select_sheet = document.querySelector(".sheet-"+select_spreadsheet.value);
+        
+        document.querySelectorAll(".select-sheet").forEach(function(element){
+            element.classList.add("d-none");
+        })
+        select_sheet.classList.remove("d-none");
+    })
+
+    add_column.addEventListener("click",function(e){
+        var column_nbr = document.querySelector(".columns-nbr");
+        var column_container = document.querySelector(".table-columns");
+        var sheet = document.querySelector(".select-sheet:not(.d-none)");
+        var end_col = sheet.value.split("!")[1];
+        var end_row = sheet.value.split("!")[2];
+        var alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var column_option = "";
+        for(var j=0;j<end_col;j++){
+          
+                column_option+= `<option value="${j}">${alphabets[j]}</option>`;
+            
+            
+        }
+        var row_options = "";
+        for(var j=0;j<end_row;j++){
+          
+                row_options+=`<option value="${j}">${j}</option>`;
+            
+            
         }
       
         
-    })
-    spreadsheet_select.addEventListener("change",function(e){
-        
-        var selectedValue = e.target.value;
-        
-        
-        document.querySelectorAll(".select-sheet").forEach(function(element){
-            element.classList.add("d-none")
-        })
-        document.querySelector(".select-"+selectedValue).classList.remove("d-none");
 
         
-    })
-   
-
-    creat_table.addEventListener("click",function(e){
         
-        var fetching_link = "/creatTable?";
-        var spreadsheet = spreadsheet_select.value;
-        fetching_link+="spreadsheet="+spreadsheet+"&";
-        var table_name = document.querySelector(".table-name").value;
-        fetching_link+="table_name="+table_name+"&";
-        var sheet =  document.querySelector(".select-"+spreadsheet).value.split("-")[0];
-        fetching_link+="sheet="+sheet+"&";
-        var start_column_range =document.querySelector(".table-range:not(.d-none) .start-column-range").value;
-        fetching_link+="start_col="+start_column_range+"&";
-        var start_row_range = document.querySelector(".table-range:not(.d-none) .start-row-range").value
-        fetching_link+="start_row="+start_row_range+"&";
-        var end_column_range = document.querySelector(".table-range:not(.d-none) .end-column-range").value
-        fetching_link+="end_col="+end_column_range+"&";
-        var end_row_range = document.querySelector(".table-range:not(.d-none) .end-row-range").value
-        fetching_link+="end_row="+end_row_range+"&";
-        for(var i=start_column_range;i<=end_column_range;i++){
+        if(column_nbr!=null && !isNaN(parseInt(column_nbr.value, 10)) ){
+            for(var i=0;i<column_nbr.value;i++){
+                column_container.innerHTML+=`
+                 <div class="border-bottom py-2 px-3 d-flex justify-content-start  row">
+                    <div class="col-4 d-flex justify-content-around border-end p-2 ">
+                        <label class="" >Name:</label>
+                        <input name="table-column-${i}"  class=" column-${i}  " style="width:10rem;" >
+                       
+                        </div> 
+                       
+                    <div class="col-2 d-flex justify-content-around border-end p-2 ">
+                            <label class="" >Column:</label>
+                            <select name="sheet-column-${i}">
+                                ${column_option}
+                            
+                            </select>
+                    </div>
+                    <div class="col-3 d-flex justify-content-around border-end p-2 ">
+                             <label class="" >row:</label>
+                               
+            
+                             <select name="row-start-${i}">
+                             
+                                ${row_options}
+                             </select>
+                             <select name="row-end-${i}">
+                               
+                                ${row_options}
+                             </select>
+                    
+                    </div>
+                        <div class="text-danger invalidColumnName-${i} d-none">
+                            please provide a name
+                        </div>
+                     </div>
+                `;
+                 
+            }
        
-        fetching_link+="column_"+i+"="+document.querySelector(".column-"+i).value+"&";
+        var total = document.querySelector(".totale_column");
+        total.value = parseInt(total.value, 10) + parseInt(column_nbr.value, 10) ;
         }
         
         
-        fetch(fetching_link).then(
-            response=>{
-                if(response.status == 200){
-                    window.location.reload();
-                }
-            }
-        )
-        
-
-    });
-
-    sheet.forEach(function(element){
-        element.addEventListener("change",function(e){
-            document.querySelectorAll(".table-range").forEach(function(table){
-                table.classList.add("d-none");
-            })
-            document.querySelector(".range-"+element.value).classList.remove("d-none");
-            
-            column_name(element.value);
-            
-            
-        })
     })
-    document.querySelectorAll(".table-range:not(.d-none) column-range").forEach(function(element){
-        element.addEventListener("change",function(e){
-            column_name()
-        })
-    })
-
-    let drop_down = this.querySelectorAll(".drop-down").forEach(function(element){
+    window.onload = function() {
+        select_spreadsheet.value = '';
+        document.querySelector(".totale_column").value =0;
+    };
+    document.querySelectorAll(".drop-down").forEach(function(element){
         element.addEventListener("click",function(e){
             if(element.classList.contains("fa-caret-right")){
                 element.classList.remove("fa-caret-right");
@@ -98,7 +113,41 @@ document.addEventListener("DOMContentLoaded",function(){
             console.log(element.id);
         })
     })
-    
+    let form = document.querySelector(".add_table_form");
+    form.addEventListener("submit",function(e){
+        e.preventDefault();
+        var table_name = document.querySelector(".table-name");
+        if(table_name.value==""){
+            document.querySelector(".invalidName").classList.remove("d-none");
+            return;
+        }
+        if(select_spreadsheet==null || select_spreadsheet.value==""){
+            document.querySelector(".invalidSpreadsheet").classList.remove("d-none");
+            return
+        }
+        var  sheet = document.querySelector(".select-sheet");
+        if(sheet ==null || sheet.value == ""){
+            document.querySelector(".invalidSheet").classList.remove("d-none");
+            return
+
+        }
+        var totale_columns = document.querySelector(".totale_column");
+        if(totale_columns ==null || totale_columns.value == "" || totale_columns.value == 0){
+            document.querySelector(".invalidTotalColumn").classList.remove("d-none");
+            return;
+
+        }
+        for(var i =0;i<totale_columns.value;i++){
+            if(document.querySelector(".column-"+i).value == "" ){
+                document.querySelector(".invalidColumnName-"+i).classList.remove("d-none");
+                return
+            }
+        }
+        this.submit();
+
+
+
+    })
     function load(){
         document.querySelector(".modal-container").classList.remove("d-none");
         document.querySelector(".loader-container").classList.remove("d-none");
@@ -110,30 +159,4 @@ document.addEventListener("DOMContentLoaded",function(){
 })
 function column_name(table){
     
-    var alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var start =document.querySelector(".table-range:not(.d-none) .start-column-range").value;
-    var end = document.querySelector(".table-range:not(.d-none) .end-column-range").value;    
-    document.querySelector(".columns-name-container").innerHTML="";
-    for(var i=start;i<=end;i++){
-        document.querySelector(".columns-name-container").innerHTML+="<div class='row d-flex align-items-center px-4 my-2'>"+alphabet[i]+":<input class='form-control column-"+i+" ms-4 col-6' style='width:10rem;'></div>";
-    }
-    document.querySelector(".table-range:not(.d-none) .start-column-range").addEventListener("change",function(e){
-        var start =document.querySelector(".table-range:not(.d-none) .start-column-range").value;
-        var end = document.querySelector(".table-range:not(.d-none) .end-column-range").value;    
-        document.querySelector(".columns-name-container").innerHTML="";
-        for(var i=start;i<=end;i++){
-            document.querySelector(".columns-name-container").innerHTML+="<div class='row d-flex align-items-center px-4 my-2'>"+alphabet[i]+":<input class='form-control column-"+i+" ms-4 col-6' style='width:10rem;'></div>";
-        }
-    })
-    document.querySelector(".table-range:not(.d-none) .end-column-range").addEventListener("change",function(e){
-        var start =document.querySelector(".table-range:not(.d-none) .start-column-range").value;
-        var end = document.querySelector(".table-range:not(.d-none) .end-column-range").value;
-
-        document.querySelector(".columns-name-container").innerHTML="";
-        for(var i=start;i<=end;i++){
-            document.querySelector(".columns-name-container").innerHTML+="<div class='row d-flex align-items-center px-4 my-2'>"+alphabet[i]+":<input class='form-control column-"+i+" ms-4 col-6' style='width:10rem;'></div>";
-        }
-    })  
-
-
 }

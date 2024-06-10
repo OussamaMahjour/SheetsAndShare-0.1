@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded",function(){
                     stopLoad();
                     window.location.href = "/spreadsheet";
                 }
+                else if(response.status==500){
+                    stopLoad();
+                    document.querySelector(".inValidSpreadsheetMessage").classList.remove("d-none");
+                }
+                
+                
             }
         )
     });

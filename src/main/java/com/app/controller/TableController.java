@@ -3,6 +3,7 @@ package com.app.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.app.model.Column;
 import com.app.service.TableService;
 import com.google.inject.Inject;
 
@@ -22,30 +23,43 @@ public class TableController extends Controller{
 
     @Override 
     public void initRoutes(){
-        Spark.get("/table",this::index);
-        Spark.get("/creatTable",this::creatTable);
+        Spark.path("/table",()->{
+            Spark.get("",this::index);
+            Spark.post("/creatTable",this::creatTable);
+        });
+        
     }
 
     public String index(Request request, Response response){
         return render(request, "table.ftl");
     }
+
     public Response creatTable(Request request,Response response){
 
         String spreadsheet = request.queryParams("spreadsheet");
-        String sheet = request.queryParams("sheet");
-        int start_row = Integer.parseInt(request.queryParams("start_row"));
-        int start_col = Integer.parseInt(request.queryParams("start_col"));
-        int end_row = Integer.parseInt(request.queryParams("end_row"));
-        int end_col = Integer.parseInt(request.queryParams("end_col"));
-        String table_name = request.queryParams("table_name");
-        List<String> Col_names = new ArrayList<>();
-        for(int i=start_col;i<=end_col;i++){
-            Col_names.add(request.queryParams("column_"+i));
+        String sheet = request.queryParams("sheet").split("!")[0];
+        int ColumnsNbr = Integer.parseInt(request.queryParams("totale-number"));
+        String table_name = request.queryParams("table-name");
+        List<Column> Columns = new ArrayList<>();
+       
+        for(int i=0;i<ColumnsNbr;i++){
+            if(request.queryParams("table-column-"+i)!=null){
+                Column column = new Column();
+                column.setName(request.queryParams("table-column-"+i));
+                column.setSrcColumn(Integer.parseInt(request.queryParams("sheet-column-"+i)));
+                column.setStartRow(Integer.parseInt(request.queryParams("row-start-"+i)));
+                column.setEndRow( Integer.parseInt(request.queryParams("row-end-"+i)));
+
+                
+                Columns.add(column);
+            }
+            
+           
         }
        
 
-         this.service.creatTable(request, table_name,spreadsheet, sheet, start_row, start_col, end_row, end_col, Col_names);
-
+         this.service.creatTable(request, table_name,spreadsheet, sheet, Columns);
+       response.redirect("/table");
 
 
         return response;

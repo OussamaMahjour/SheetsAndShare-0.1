@@ -15,6 +15,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+
+import com.app.model.Column;
 import com.app.model.Table;
 import com.app.util.GoogleUtilApi;
 import com.google.api.services.gmail.Gmail;
@@ -35,7 +37,7 @@ public class EmailService {
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
         java.util.regex.Matcher matcher = pattern.matcher(message);
 
-        Map<String, List<Object>> replacements = new HashMap<>();
+        Map<String, List<String>> replacements = new HashMap<>();
 
         // Gather all replacements needed
         while (matcher.find()) {
@@ -44,7 +46,14 @@ public class EmailService {
 
             for (Table table : tables) {
                 if (table.getName().equals(tableName)) {
-                    List<Object> columnData = table.getData().get(columnName);
+                    List<String> columnData= new ArrayList<>(); 
+                    for(Column  column:table.getData()){
+                        
+                        if(column.getName().equals(columnName)){
+                            columnData = column.getData();
+                        }
+                    }
+                    
                     if (columnData != null) {
                         replacements.put(matcher.group(0), columnData);
                     }
@@ -56,9 +65,9 @@ public class EmailService {
         List<String> results = new ArrayList<>();
         results.add(message);
 
-        for (Map.Entry<String, List<Object>> entry : replacements.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : replacements.entrySet()) {
             String placeholder = entry.getKey();
-            List<Object> values = entry.getValue();
+            List<String> values = entry.getValue();
             List<String> newResults = new ArrayList<>();
 
             for (String result : results) {
@@ -74,7 +83,7 @@ public class EmailService {
 
     }
     public void sendEmail(Table destTable,String dest,List<Table> tables,String subject,String message )throws IOException,MessagingException {
-        List<Object> destinations = destTable.getData().get(dest); 
+        List<String> destinations = destTable.getColumn(dest).getData(); 
         List<String> messages = this.compile(tables, message);
         for(Object destination :destinations){
             Properties props = new Properties();

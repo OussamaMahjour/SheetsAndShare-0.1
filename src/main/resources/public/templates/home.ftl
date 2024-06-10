@@ -44,8 +44,12 @@
     </div>
     <div class="row  rounded spreadsheet-home overflow-hidden d-flex justify-content-center ">
         <div class="row row-link d-flex justify-content-between align-items-center">
-            <input name="spreadsheetId" class="sheet-id"placeholder="ID...">
+            <input name="spreadsheetId" class="sheet-id is-invalid" id="validspreadsheet" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required placeholder="ID...">
+            
             <button class="import-sheet-link" >Import</button>
+            <div id="validspreadsheet" class="invalid-feedback inValidSpreadsheetMessage d-none">
+               Please choose a valid id .
+            </div>
         </div>
         <div class="row row-or px-5"> <div class="separator">or</div></div>
         <div class="row row-csv d-flex justify-content-center align-items-center ">

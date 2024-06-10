@@ -21,7 +21,7 @@
                         <th scope="row"><i class="fa-solid fa-caret-down  drop-down-close" id="${spreadsheet.id}"></i></th>
                         <td>${spreadsheet.name}</td>
                         <td>${spreadsheet.id}</td>
-                        <td><i class="fa-solid fa-trash" ></i></td>
+                        <td><i class="fa-solid fa-trash delet-sheet" id="delete-${spreadsheet.id}" ></i></td>
                     </tr>
                     <tr>
                         <td colspan="4" class="p-0"> 
