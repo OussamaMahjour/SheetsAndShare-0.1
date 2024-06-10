@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded",function(){
                              </select>
                     
                     </div>
+                            <span class="text-muted col-1">${sheet.value.split("!")[0]}</span>
                         <div class="text-danger invalidColumnName-${i} d-none">
                             please provide a name
                         </div>
